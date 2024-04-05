@@ -2,16 +2,17 @@
 package main
 
 import (
+	"log"
 	"net/http"
 )
 
 // функция main вызывается автоматически при запуске приложения
 func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/alice/", webhook)
-	err := http.ListenAndServe("localhost:8080", mux)
+	ParseFlags()
+
+	err := run()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
 
@@ -19,7 +20,7 @@ func main() {
 func run() error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/alice/", webhook)
-	return http.ListenAndServe("localhost:8080", mux)
+	return http.ListenAndServe(FlagRunAddr, mux)
 }
 
 // функция webhook — обработчик HTTP-запроса
